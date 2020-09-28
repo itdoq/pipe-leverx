@@ -27,7 +27,7 @@ pipeline {
                 echo " ============== stage 1: building image locally =================="
                 dir ('docker/toolbox') {
                 	// sh 'docker build -t semaev/toolbox:latest . '
-                    sh 'docker build -t <itdoq/push-image-alpine-echo>:<latest> . ' 
+                    sh 'docker build -t itdoq/push-image-alpine-echo:latest . ' 
                 }
             }
         }
