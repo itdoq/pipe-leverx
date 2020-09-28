@@ -12,36 +12,31 @@ pipeline {
         timestamps()
     }
     stages {
-        // stage("docker login") {
-        //     steps {
-        //         echo " ============== docker login =================="
-        //         withCredentials([usernamePassword(credentialsId: 'dockerhub_semaev', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-        //             sh """
-        //             docker login -u $USERNAME -p $PASSWORD
-        //             """
-        //         }
-        //     }
-        // }
-        stage("docker image build") {
+        stage("build docker image") {
             steps {
                 echo " ============== stage 1: building image locally =================="
                 dir ('docker/toolbox') {
-                	// sh 'docker build -t semaev/toolbox:latest . '
                     sh 'docker build -t itdoq/push-image-alpine-echo:latest . ' 
+                }
+            }
+        }
+        stage("docker login") {
+            steps {
+                echo " ============== stage 2: docker login =================="
+                withCredentials([usernamePassword(credentialsId: 'dockerhub_itdoq', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'docker login -u $USERNAME -p $PASSWORD'
                 }
             }
         }
         stage("push to docker hub") {
             steps {
-                echo " ============== stage 2: pushing image to docker hub =================="
-                sh '''
-                docker push itdoq/push-image-alpine-echo:latest
-                '''
+                echo " ============== stage 3: pushing image to docker hub =================="
+                sh 'docker push itdoq/push-image-alpine-echo:latest'
             }
         }
         stage("docker hub run") {
             steps {
-                echo " ============== stage 3: runnin image from docker hub =================="
+                echo " ============== stage 4: runnin image from docker hub =================="
                 sh 'docker run itdoq/push-image-alpine-echo:latest'
             }
         }
