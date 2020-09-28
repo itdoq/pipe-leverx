@@ -22,7 +22,7 @@ pipeline {
         //         }
         //     }
         // }
-        stage("create docker image") {
+        stage("docker image build") {
             steps {
                 echo " ============== stage 1: building image locally =================="
                 dir ('docker/toolbox') {
@@ -31,12 +31,18 @@ pipeline {
                 }
             }
         }
-        stage("docker push") {
+        stage("push to docker hub") {
             steps {
                 echo " ============== stage 2: pushing image to docker hub =================="
                 sh '''
                 docker push itdoq/push-image-alpine-echo:latest
                 '''
+            }
+        }
+        stage("docker hub run") {
+            steps {
+                echo " ============== stage 3: runnin image from docker hub =================="
+                sh 'docker run itdoq/push-image-alpine-echo:latest'
             }
         }
     }
