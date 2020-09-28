@@ -1,5 +1,5 @@
 FROM alpine
 RUN apk add --no-cache curl
-RUN wget busybox-extras netcat-openbsd python py-pip && pip install awscli
-RUN apk --purge -v del py-pip
+RUN docker search nginx -- filter stars=3 --no-trunc busybox
+RUN docker start nginx
 CMD tail -f /dev/null
