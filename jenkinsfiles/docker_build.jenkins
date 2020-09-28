@@ -24,20 +24,20 @@ pipeline {
         // }
         stage("create docker image") {
             steps {
-                echo " ============== start building image =================="
+                echo " ============== stage 1: building image locally =================="
                 dir ('docker/toolbox') {
                 	// sh 'docker build -t semaev/toolbox:latest . '
-                    sh 'docker build . '
+                    sh 'docker build -t <itdoq/push-image-alpine-echo>:<latest> . ' 
                 }
             }
         }
-        // stage("docker push") {
-        //     steps {
-        //         echo " ============== start pushing image =================="
-        //         sh '''
-        //         docker push semaev/toolbox:latest
-        //         '''
-        //     }
-        // }
+        stage("docker push") {
+            steps {
+                echo " ============== stage 2: pushing image to docker hub =================="
+                sh '''
+                docker push itdoq/push-image-alpine-echo:latest
+                '''
+            }
+        }
     }
 }
