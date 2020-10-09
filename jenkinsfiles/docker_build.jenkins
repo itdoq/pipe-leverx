@@ -11,6 +11,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
         timestamps()
     }
+    
     stages {
         stage("build docker image") {
             steps {
@@ -20,7 +21,7 @@ pipeline {
                 }
             }
         }
-        stage("docker login") {
+        stage("login to docker hub") {
             steps {
                 echo " ============== stage 2: docker login =================="
                 withCredentials([usernamePassword(credentialsId: 'dockerhub_itdoq', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
